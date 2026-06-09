@@ -10,7 +10,7 @@ def main():
     hf_token = os.getenv("HF_TOKEN") 
     github_token = os.getenv("GITHUB_TOKEN")
     issue_num = os.getenv("ISSUE_NUMBER")
-    issue_body = os.getenv("ISSUE_BODY")
+    issue_body = os.getenv("ISSUE_BODY") or ""  # Default to empty string if no description is written
     issue_title = os.getenv("ISSUE_TITLE")
     repo_name = os.getenv("REPO_NAME")
 
@@ -18,7 +18,7 @@ def main():
         print("❌ Error: Missing HF_TOKEN environment variable (Hugging Face Free Token).")
         sys.exit(1)
 
-    if not all([github_token, issue_num, issue_body, repo_name]):
+    if not all([github_token, issue_num, repo_name]):
         print("❌ Error: Missing required GitHub variables. This script runs inside GitHub Actions.")
         sys.exit(1)
 
