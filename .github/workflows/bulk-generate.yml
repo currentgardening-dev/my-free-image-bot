@@ -1,0 +1,40 @@
+name: Bulk Generate AI Images
+
+on:
+  push:
+    paths:
+      - 'prompts.txt'
+  workflow_dispatch:
+
+jobs:
+  bulk-generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Bulk Generation
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python bulk_generate.py
+
+      - name: Commit and Push Generated Images
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add bulk_images/
+          git commit -m "chore: auto-generate bulk images [skip ci]" || echo "No changes to commit"
+          git push
