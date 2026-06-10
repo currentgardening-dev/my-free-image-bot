@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -37,4 +39,5 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add bulk_images/
           git commit -m "chore: auto-generate bulk images [skip ci]" || echo "No changes to commit"
+          git pull --rebase origin main
           git push
